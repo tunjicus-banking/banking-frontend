@@ -26,6 +26,12 @@ class _LoginState extends State<Login> with ValidatorMixin {
 
   @override
   Widget build(BuildContext ctx) {
+    final ourWidth = MediaQuery.of(ctx).size.width;
+    final ourHeight = MediaQuery.of(ctx).size.height;
+
+    final horizontalTextInset = .02 * ourWidth;
+    final sizedBoxHeight = .015 * ourHeight;
+
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(title: Text("Login Page")),
@@ -37,9 +43,8 @@ class _LoginState extends State<Login> with ValidatorMixin {
                     child: Column(
                       children: [
                         Padding(
-                          // TODO: Replace this horizontal w/ a percentage by using
-                          // MediaQuery.of(context).size.width
-                          padding: EdgeInsets.symmetric(horizontal: 15),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: horizontalTextInset),
                           child: TextFormField(
                             validator: (value) => notEmpty('Username', value),
                             decoration: InputDecoration(
@@ -51,12 +56,10 @@ class _LoginState extends State<Login> with ValidatorMixin {
                             }),
                           ),
                         ),
-                        // TODO: Should probably also replace with percentage of height
-                        SizedBox(height: 20),
+                        SizedBox(height: sizedBoxHeight),
                         Padding(
-                          // TODO: Replace this horizontal w/ a percentage by using
-                          // MediaQuery.of(context).size.width
-                          padding: EdgeInsets.symmetric(horizontal: 15),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: horizontalTextInset),
                           child: TextFormField(
                             obscureText: true,
                             validator: (value) => notEmpty('Password', value),
@@ -69,13 +72,12 @@ class _LoginState extends State<Login> with ValidatorMixin {
                             }),
                           ),
                         ),
-                        SizedBox(height: 20),
+                        SizedBox(height: sizedBoxHeight),
                         // FIXME: Is there a better way to do conditional rendering?
                         isSigningUp
                             ? Padding(
-                                // TODO: Replace this horizontal w/ a percentage by using
-                                // MediaQuery.of(context).size.width
-                                padding: EdgeInsets.symmetric(horizontal: 15),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: .02 * ourWidth),
                                 child: TextFormField(
                                   validator: (value) =>
                                       notEmpty('First name', value),
@@ -89,12 +91,13 @@ class _LoginState extends State<Login> with ValidatorMixin {
                                 ),
                               )
                             : Container(),
-                        isSigningUp ? SizedBox(height: 20) : Container(),
+                        isSigningUp
+                            ? SizedBox(height: sizedBoxHeight)
+                            : Container(),
                         isSigningUp
                             ? Padding(
-                                // TODO: Replace this horizontal w/ a percentage by using
-                                // MediaQuery.of(context).size.width
-                                padding: EdgeInsets.symmetric(horizontal: 15),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: horizontalTextInset),
                                 child: TextFormField(
                                   validator: (value) =>
                                       notEmpty('Last name', value),
@@ -109,7 +112,9 @@ class _LoginState extends State<Login> with ValidatorMixin {
                                 ),
                               )
                             : Container(),
-                        isSigningUp ? SizedBox(height: 20) : Container(),
+                        isSigningUp
+                            ? SizedBox(height: sizedBoxHeight)
+                            : Container(),
                         ElevatedButton(
                             onPressed: () {
                               formGlobalKey.currentState?.validate();
@@ -118,7 +123,8 @@ class _LoginState extends State<Login> with ValidatorMixin {
                         Row(
                           children: [
                             Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 15),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: horizontalTextInset),
                               child: Text("Switch to sign-up mode?"),
                             ),
                             Align(
