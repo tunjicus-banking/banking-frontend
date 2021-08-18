@@ -1,5 +1,6 @@
 import 'package:bank/login.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(MyApp());
@@ -23,8 +24,25 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: Login(),
+      home: HomePage(),
     );
+  }
+}
+
+class HomePage extends StatelessWidget {
+  final prefs = SharedPreferences.getInstance();
+
+  Widget build(BuildContext ctx) {
+    return FutureBuilder(
+        future: prefs,
+        builder: (ctx, AsyncSnapshot<SharedPreferences> prefs) {
+          // NOTE: Subject to change if we don't actually use a token
+          final isSignedIn = prefs.data?.containsKey("token");
+          if (isSignedIn == null || !isSignedIn) {
+            return Login();
+          }
+          return Container();
+        });
   }
 }
 
