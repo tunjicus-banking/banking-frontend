@@ -1,12 +1,18 @@
-import 'package:bank/login.dart';
+import 'package:bank/main.data.dart';
+import 'package:bank/transfer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(ProviderScope(
+    child: MyApp(),
+    overrides: [configureRepositoryLocalStorage(clear: true)],
+  ));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends HookWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -24,7 +30,15 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: HomePage(),
+      home: RefreshIndicator(
+        onRefresh: () async {
+          await context.refresh(repositoryInitializerProvider());
+        },
+        child: useProvider(repositoryInitializerProvider()).when(
+            loading: () => Center(child: const CircularProgressIndicator()),
+            error: (err, stack) => Center(child: Text(err.toString())),
+            data: (_) => HomePage()),
+      ),
     );
   }
 }
@@ -39,7 +53,7 @@ class HomePage extends StatelessWidget {
           // NOTE: Subject to change if we don't actually use a token
           final isSignedIn = prefs.data?.containsKey("token");
           if (isSignedIn == null || !isSignedIn) {
-            return Login();
+            return UserAutocomplete();
           }
           return Container();
         });
