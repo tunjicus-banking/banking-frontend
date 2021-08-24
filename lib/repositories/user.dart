@@ -1,10 +1,11 @@
+import 'package:bank/repositories/adapters.dart';
 import 'package:flutter_data/flutter_data.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'user.g.dart';
 
 @JsonSerializable()
-@DataRepository([MyJSONServerAdapter])
+@DataRepository([MyJSONServerAdapter, BankRemoteAdapter])
 class User with DataModel<User> {
   @override
   final int id;
@@ -23,11 +24,11 @@ class User with DataModel<User> {
 
 mixin MyJSONServerAdapter on RemoteAdapter<User> {
   @override
-  String get baseUrl => 'http://192.168.0.23:8080/';
+  String get type => 'user';
+  @override
+  String get baseUrl => 'http://127.0.0.1:8080/';
   @override
   String urlForFindAll(params) => 'user/find';
-  @override
-  String urlForFindOne(id, params) => 'user/$id';
   @override
   DataRequestMethod methodForSave(id, params) =>
       id != null ? DataRequestMethod.PUT : DataRequestMethod.POST;

@@ -51,8 +51,8 @@ class HomePage extends StatelessWidget {
         future: prefs,
         builder: (ctx, AsyncSnapshot<SharedPreferences> prefs) {
           // NOTE: Subject to change if we don't actually use a token
-          final isSignedIn = prefs.data?.containsKey("token");
-          if (isSignedIn == null || !isSignedIn) {
+          final isSignedIn = prefs.data?.containsKey("token") ?? false;
+          if (!isSignedIn) {
             return UserAutocomplete();
           }
           return Container();
